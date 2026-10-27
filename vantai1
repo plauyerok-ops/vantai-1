@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08080d">
+  <meta name="description" content="VANTA — meet people from around the world.">
+  <title>VANTA — Global Video Chat</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08080d;
+      --panel: #111119;
+      --line: #272735;
+      --text: #f5f4ff;
+      --muted: #9695a9;
+      --purple: #a855f7;
+      --cyan: #49e6ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% -20%, #36205c 0, transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+    }
+
+    button { font: inherit; cursor: pointer; }
+
+    .topbar {
+      max-width: 1180px;
+      margin: auto;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ffffff0c;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: 950;
+      letter-spacing: 7px;
+      background: linear-gradient(90deg, white, var(--cyan), var(--purple));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .status {
+      color: #b7fbd1;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .status::before {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-right: 8px;
+      border-radius: 50%;
+      background: #45e69a;
+      box-shadow: 0 0 12px #45e69a;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: auto;
+      padding: 65px 24px 40px;
+    }
+
+    .hero { text-align: center; margin-bottom: 38px; }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 15px 0;
+      font-size: clamp(36px, 7vw, 70px);
+      line-height: 1.05;
+      letter-spacing: -3px;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, var(--cyan), #c084fc);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      max-width: 520px;
+      margin: 0 auto;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(260px, .8fr);
+      gap: 20px;
+    }
+
+    .video-card, .side-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #101018eF;
+      overflow: hidden;
+    }
+
+    .video-screen {
+      min-height: 340px;
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse at 50% 55%, #372052 0, transparent 45%),
+        linear-gradient(135deg, #151522, #09090e);
+    }
+
+    .orb {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #a855f788;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #d6b2ff, #7436bb 40%, #15101f 75%);
+      box-shadow: 0 0 55px #a855f733, inset 0 0 25px #fff2;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      50% { transform: translateY(-8px); }
+    }
+
+    .screen-title { font-weight: 750; font-size: 18px; }
+    .screen-hint { color: var(--muted); font-size: 13px; }
+
+    .video-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 17px 20px;
+      gap: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .tag {
+      color: var(--muted);
+      font-size: 12px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 8px 11px;
+    }
+
+    .side-card { padding: 24px; }
+    .side-card h2 { margin: 0 0 8px; font-size: 20px; }
+    .side-card > p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    .field-label {
+      display: block;
+      margin: 24px 0 9px;
+      font-size: 12px;
+      color: #c4c2d4;
+    }
+
+    select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      color: white;
+      background: #191923;
+      border: 1px solid var(--line);
+    }
+
+    .primary, .secondary {
+      width: 100%;
+      border-radius: 12px;
+      padding: 14px;
+      font-weight: 800;
+      transition: transform .2s, opacity .2s;
+    }
+
+    .primary {
+      margin-top: 22px;
+      color: #08080d;
+      border: 0;
+      background: linear-gradient(100deg, var(--cyan), #c4a0ff);
+      box-shadow: 0 8px 30px #7d5bff22;
+    }
+
+    .secondary {
+      margin-top: 10px;
+      color: white;
+      border: 1px solid var(--line);
+      background: #1a1a25;
+    }
+
+    .primary:hover, .secondary:hover { transform: translateY(-2px); }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+
+    .notice {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #ffffff06;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .feature {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #ffffff04;
+    }
+
+    .feature strong { display: block; margin-bottom: 8px; }
+    .feature p { color: var(--muted); font-size: 12px; line-height: 1.6; margin: 0; }
+
+    footer {
+      text-align: center;
+      padding: 35px 20px;
+      color: #77768a;
+      font-size: 11px;
+    }
+
+    @media (max-width: 760px) {
+      main { padding: 45px 16px 25px; }
+      .topbar { padding: 20px 16px; }
+      .layout { grid-template-columns: 1fr; }
+      .video-screen { min-height: 260px; }
+      .features { grid-template-columns: 1fr; }
+      h1 { letter-spacing: -1.5px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">VANTA</div>
+    <div class="status">GLOBAL NETWORK</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">One world. New connections.</div>
+      <h1>Meet beyond <span>borders.</span></h1>
+      <p class="subtitle">
+        Один мир — миллионы историй. Открой новые знакомства
+        и посмотри, кто находится по ту сторону экрана.
+      </p>
+    </section>
+
+    <section class="layout">
+      <div class="video-card">
+        <div class="video-screen">
+          <div class="orb"></div>
+          <div class="screen-title" id="screenTitle">Твой следующий контакт — неизвестен</div>
+          <div class="screen-hint" id="screenHint">
+            Нажми «Начать», чтобы подготовиться к знакомству
+          </div>
+        </div>
+        <div class="video-footer">
+          <span class="tag">✦ VANTA CONNECT</span>
+          <span class="tag">BETA 0.1</span>
+        </div>
+      </div>
+
+      <aside class="side-card">
+        <h2>Начнём знакомство?</h2>
+        <p>Выбери язык и приготовься открыть для себя новый мир.</p>
+
+        <label class="field-label" for="language">Язык общения</label>
+        <select id="language">
+          <option value="any">Любой язык</option>
+          <option value="en">English</option>
+          <option value="ru">Русский</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+        </select>
+
+        <button class="primary" id="start">Начать поиск ↗</button>
+        <button class="secondary" id="stop" disabled>Остановить</button>
+
+        <div class="notice">
+          Это демонстрационная версия интерфейса. Настоящий видеозвонок
+          и поиск собеседника пока не подключены. Камера не запускается
+          автоматически.
+        </div>
+      </aside>
+    </section>
+
+    <section class="features">
+      <div class="feature">
+        <strong>◉ Весь мир</strong>
+        <p>Концепция международных знакомств без границ.</p>
+      </div>
+      <div class="feature">
+        <strong>⌁ Просто</strong>
+        <p>Минималистичный интерфейс для телефона и компьютера.</p>
+      </div>
+      <div class="feature">
+        <strong>◇ Безопасность</strong>
+        <p>Перед запуском видеочата добавим блокировку и жалобы.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>VANTA © 2026 · CONNECT BEYOND BORDERS</footer>
+
+  <script>
+    const startButton = document.getElementById("start");
+    const stopButton = document.getElementById("stop");
+    const title = document.getElementById("screenTitle");
+    const hint = document.getElementById("screenHint");
+    const language = document.getElementById("language");
+
+    startButton.addEventListener("click", () => {
+      title.textContent = "Интерфейс готов к следующему этапу";
+      hint.textContent =
+        "Видеосвязь ещё не подключена. Выбран язык: " +
+        language.options[language.selectedIndex].text;
+      startButton.disabled = true;
+      stopButton.disabled = false;
+    });
+
+    stopButton.addEventListener("click", () => {
+      title.textContent = "Твой следующий контакт — неизвестен";
+      hint.textContent = "Нажми «Начать», чтобы подготовиться к знакомству";
+      startButton.disabled = false;
+      stopButton.disabled = true;
+    });
+  </script>
+</body>
+</html>
